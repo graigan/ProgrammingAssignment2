@@ -1,15 +1,35 @@
-## Put comments here that give an overall description of what your
-## functions do
+## Set of functions for storing inverse matrices in the cache
+## Written on Jan 20, 2015 for R Programming class on Coursera
 
-## Write a short comment describing this function
+## Function list for storing matrix and its inverse
 
-makeCacheMatrix <- function(x = matrix()) {
+makeCacheMatrix <- function(mat = matrix()) {
+    inv <- NULL
 
+    set <- function(A){ mat <<- A; inv <<- NULL }   ## provisions for getting/setting the matrix
+    get <- function(){ mat }
+
+    setInv <- function(B){ inv <<- B }              ## provisions for getting/setting the inverse
+    getInv <- function(){ inv }
+
+    list(set = set, get = get, setInv = setInv, getInv = getInv)
 }
 
 
-## Write a short comment describing this function
+## Solves for the inverse, or retrieves inverse from cache if previously solved
+## Note: '...' argument removed to prevent unintended uses.
 
-cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+cacheSolve <- function(A) {
+
+    inv <- A$getInv()                       ## Retrieve inverse from cache
+
+    if(!is.null(inv)) {
+        message("getting cached data")      ## If 'inv' is NOT null, notify user
+    } else {
+        mat <- A$get()                      ## Otherwise, solve for inverse and store in cache
+        inv <- solve(mat)
+        A$setInv(inv)
+    }
+
+    inv                                     ## Return 'inv'
 }
